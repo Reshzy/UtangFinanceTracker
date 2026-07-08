@@ -1,0 +1,106 @@
+erDiagram
+
+    USERS ||--o{ WORKSPACES : owns
+
+    WORKSPACES ||--o{ CONTACTS : contains
+    WORKSPACES ||--o{ WALLETS : owns
+    WORKSPACES ||--o{ REMINDERS : schedules
+    WORKSPACES ||--o{ NOTIFICATIONS : receives
+
+    CONTACTS ||--o{ LOANS : has
+    CONTACTS ||--o{ FINANCIAL_ACTIVITIES : records
+    CONTACTS ||--o{ NOTES : owns
+    CONTACTS ||--o{ REMINDERS : receives
+
+    WALLETS ||--o{ LOANS : funds
+    WALLETS ||--o{ REPAYMENTS : receives
+
+    LOANS ||--o{ REPAYMENTS : has
+
+    USERS {
+        bigint id PK
+        string name
+        string email
+        string password
+    }
+
+    WORKSPACES {
+        bigint id PK
+        bigint user_id FK
+        string name
+        string currency_code
+        string timezone
+    }
+
+    WALLETS {
+        bigint id PK
+        bigint workspace_id FK
+        string name
+        string type
+        boolean is_default
+    }
+
+    CONTACTS {
+        bigint id PK
+        bigint workspace_id FK
+        string full_name
+        string nickname
+        string phone
+        string facebook
+        string relationship
+        date birthday
+        timestamp archived_at
+    }
+
+    LOANS {
+        bigint id PK
+        bigint contact_id FK
+        bigint wallet_id FK
+        bigint principal_amount
+        bigint interest_amount
+        string status
+        date due_date
+    }
+
+    REPAYMENTS {
+        bigint id PK
+        bigint loan_id FK
+        bigint wallet_id FK
+        bigint amount
+        string payment_method
+    }
+
+    FINANCIAL_ACTIVITIES {
+        bigint id PK
+        bigint contact_id FK
+        string type
+        string result
+        bigint amount
+        date event_date
+    }
+
+    NOTES {
+        bigint id PK
+        bigint contact_id FK
+        text content
+        boolean pinned
+    }
+
+    REMINDERS {
+        bigint id PK
+        bigint workspace_id FK
+        bigint contact_id FK
+        bigint loan_id FK
+        string title
+        datetime reminder_at
+        datetime completed_at
+        string recurrence
+    }
+
+    NOTIFICATIONS {
+        bigint id PK
+        bigint workspace_id FK
+        string title
+        string body
+        datetime read_at
+    }
