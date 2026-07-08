@@ -6,14 +6,26 @@ import { RecentContactsSection } from '@/components/home/recent-contacts-section
 import { RecentFinancialEventsSection } from '@/components/home/recent-financial-events-section';
 import { UpcomingRemindersSection } from '@/components/home/upcoming-reminders-section';
 import {
-    placeholderContacts,
     placeholderFinancialEvents,
     placeholderReminders,
     placeholderStatistics,
 } from '@/data/home-placeholder';
 import { dashboard } from '@/routes';
+import type { Contact } from '@/types/contact';
 
-export default function Home() {
+type HomeProps = {
+    recentContacts?: Contact[];
+};
+
+export default function Home({ recentContacts = [] }: HomeProps) {
+    const contactsForSection = recentContacts.map((contact) => ({
+        id: contact.id,
+        fullName: contact.fullName,
+        nickname: contact.nickname ?? undefined,
+        relationship: contact.relationship ?? '',
+        outstandingBalance: 0,
+    }));
+
     return (
         <>
             <Head title="Home" />
@@ -21,7 +33,7 @@ export default function Home() {
             <div className="flex flex-1 flex-col gap-8 p-4 pb-8 md:max-w-3xl md:p-6">
                 <HomeGreeting />
                 <HomeSearch />
-                <RecentContactsSection contacts={placeholderContacts} />
+                <RecentContactsSection contacts={contactsForSection} />
                 <UpcomingRemindersSection reminders={placeholderReminders} />
                 <QuickStatisticsSection statistics={placeholderStatistics} />
                 <RecentFinancialEventsSection

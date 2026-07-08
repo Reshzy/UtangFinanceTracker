@@ -40,6 +40,11 @@ class User extends Authenticatable implements PasskeyUser
         return $this->hasMany(Workspace::class);
     }
 
+    public function personalWorkspace(): Workspace
+    {
+        return $this->workspaces()->firstOrFail();
+    }
+
     /**
      * Get the attributes that should be cast.
      *

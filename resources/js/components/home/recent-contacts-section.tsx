@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { SectionHeader } from '@/components/home/section-header';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,7 @@ import {
 import type { PlaceholderContact } from '@/data/home-placeholder';
 import { useInitials } from '@/hooks/use-initials';
 import { formatMoney } from '@/lib/money';
+import { index as contactsIndex } from '@/routes/contacts';
 
 type RecentContactsSectionProps = {
     contacts: PlaceholderContact[];
@@ -27,8 +29,8 @@ export function RecentContactsSection({
                 title="Recent contacts"
                 description="People you've interacted with recently"
                 action={
-                    <Button variant="ghost" size="sm" className="shrink-0">
-                        View all
+                    <Button variant="ghost" size="sm" className="shrink-0" asChild>
+                        <Link href={contactsIndex()}>View all</Link>
                     </Button>
                 }
             />
