@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Enums\WalletType;
+use App\Events\WorkspaceCreated;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\DB;
@@ -26,11 +26,7 @@ class CreatePersonalWorkspace
                 'currency_code' => 'PHP',
             ]);
 
-            $workspace->wallets()->create([
-                'name' => 'Cash',
-                'type' => WalletType::Cash,
-                'is_default' => true,
-            ]);
+            event(new WorkspaceCreated($workspace));
         });
     }
 }
