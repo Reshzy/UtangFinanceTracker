@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Enums\WalletType;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
@@ -35,5 +37,16 @@ class RegistrationTest extends TestCase
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard', absolute: false));
+
+        $user = User::query()->where('email', 'test@example.com')->firstOrFail();
+        $workspace = $user->workspaces()->firstOrFail();
+        $wallet = $workspace->wallets()->firstOrFail();
+
+        $this->assertSame(1, $user->workspaces()->count());
+        $this->assertSame('Personal', $workspace->name);
+        $this->assertSame('PHP', $workspace->currency_code);
+        $this->assertSame('Cash', $wallet->name);
+        $this->assertSame(WalletType::Cash, $wallet->type);
+        $this->assertTrue($wallet->is_default);
     }
 }
